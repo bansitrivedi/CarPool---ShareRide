@@ -1,0 +1,99 @@
+{% extends "home/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+  <div class="content-section">
+    <form method="POST">
+        {% csrf_token %}
+<fieldset class="form-group">
+  <script type="text/javascript">
+  $(function() {
+    $('#datetimepicker3').datetimepicker({
+      pickDate: false,
+      format: 'LT'
+    });
+  });
+</script>
+        <!-- {{ placeRide_form.journey_date|crispy }}
+
+  {{ placeRide_form.journey_time|crispy  }}
+
+    {{ placeRide_form.seat_no  }}
+   {{ placeRide_form.car_model  }}
+    {{ placeRide_form.car_no }}
+{{ placeRide_form.fare }}
+    {{ placeRide_form.pay_mode }}
+
+
+    <div id='printoutPanel'></div>
+    <div id='searchBoxContainer'>
+      {{ placeRide_form.source_location  }}<hr/>
+  </div>
+    <div id='suggestionBoxId'></div>
+  <div id='searchBoxContainer2'>
+    {{ placeRide_form.destination_location  }}
+  </div>
+</fieldset> -->
+{{ form|crispy }}
+
+
+    <div id='printoutPanel'></div>
+    <div id='searchBoxContainer' style="margin-top:5px;">
+      {{ placeRide_form.source_location  }}<hr/>
+  </div>
+    <div id='suggestionBoxId'></div>
+  <div id='searchBoxContainer2'>
+    {{ placeRide_form.destination_location  }}
+  </div>
+</fieldset>
+
+  <div class="form-group"><button class="btn btn-outline-info" type = "submit">Update Ride </button>
+
+
+  </div>
+
+  </form>
+
+  </div>
+    <div id='myMap'></div>
+            <script type='text/javascript'>
+            function bingMapsReady() {
+                Microsoft.Maps.loadModule("Microsoft.Maps.AutoSuggest", {
+                callback: onLoad,
+                errorCallback: logError,
+                credentials: 'Apx6ZniwUTYykWFCN6hlqGh8jzep1v5FJoW6jkuY2keuNmx30oKkIfnibTvv0DnK'
+                });
+
+                function onLoad() {
+                var options = { maxResults: 8 };
+                initAutosuggestControl(options, "searchmapBox", "searchBoxContainer");
+                initAutosuggestControl(options, "searchmapBox2", "searchBoxContainer2");
+                }
+                }
+
+                function initAutosuggestControl(
+                options,
+                suggestionBoxId,
+                suggestionContainerId
+                ) {
+                var manager = new Microsoft.Maps.AutosuggestManager(options);
+                manager.attachAutosuggest(
+                "#" + suggestionBoxId,
+                "#" + suggestionContainerId,
+                selectedSuggestion
+                );
+
+                function selectedSuggestion(suggestionResult) {
+                document.getElementById(suggestionBoxId).innerHTML =
+                  suggestionResult.formattedSuggestion;
+                }
+                }
+
+                function logError(message) {
+                  console.log(message);
+                }
+
+            </script>
+
+
+{% endblock content %}

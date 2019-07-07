@@ -1,0 +1,90 @@
+{% extends "home/base.html" %}
+
+{% block content %}
+<h1 align="center">Rides You have Booked </h1>
+{% for ride in my_rides %}
+    <div class="card mb-5"  style='background:#F1FF95; font-family: "Times New Roman", Times, serif; font-size:20px;margin-bottom:20px' >
+        <div class="card-body mb-5">
+       <a class="nav-item nav-link"><h5 >Ride was placed By  {{ ride.ride_id.user.first_name }} {{ ride.ride_id.user.last_name }}</h5> </a>
+       <div class="row">
+       <div class="col-sm-4 col-xs-4">
+
+        <li class="list-group-item "> Date of Journey <small class="text-muted">{{ ride.ride_id.journey_date|date:"F d, Y" }}</small></li>
+        <li class="list-group-item"> Time of Journey <small class="text-muted">{{ ride.ride_id.journey_time}}</small></li>
+        <li class="list-group-item"> Gender of driver is <small class="text-muted">{% if ride.ride_id.user.gender == 'M' %}Male{% else %}Female{% endif %}</small></li>
+       </div>
+        <div class="col-sm-4 col-xs-4">
+         <li class="list-group-item"> Source location: {{ ride.ride_id.source_location }}</li>
+         <li class="list-group-item"> Destination Location: {{ ride.ride_id.destination_location }}</li>
+
+
+         </div>
+         <div class="col-sm-4 col-xs-4">
+
+            <li class="list-group-item"> Car Model is {{ ride.ride_id.car_model }}</li>
+            <li class="list-group-item">Car Number is  {{ ride.ride_id.car_no }} </li>
+            <li class="list-group-item"style='color:blue'>Total fare is Rs.{{ ride.fare }}</li>
+
+          </div>
+       </div>
+
+         
+        
+         {% if ride.ride_id.pay_mode == 'ONLINE' and ride.is_paid == False %}
+
+          <form action="{% url 'payments:process' %}" method="post">
+              {% csrf_token %}
+              <input type='hidden' name='ride_id' value='{{ ride.id }}'>
+
+              <div class="row mt-5">
+                <div class="col-sm-6 col-xs-6">
+                  <p class="alert alert-warning" role="alert">This ride has ONLINE payment. </p>
+                </div>
+
+                  
+                <div class="col-sm-6 col-xs-6">
+                
+                  {% now "Y-m-d" as todays_date %}
+                  {% now "H:i" as todays_time %}
+                  
+                  {% if todays_date == ride.ride_id.journey_date|date:"Y-m-d" and  ride.ride_id.journey_time|date:"H:i" < todays_time  %}
+                  
+                    <p class="alert alert-info">Press here to make a payment
+                      <button class="btn btn-info btn-lg" style="width:auto" type = "submit">Payment</button>
+                    </p>
+                  {% else %}
+                    <p class="alert alert-info">Payment will be available soon</p>
+                  {% endif %}
+                </div>
+                
+              
+              </div>
+
+                         
+                           
+                           
+          
+          {% comment %} {% endif %} {% endcomment %}
+          {% elif ride.ride_id.pay_mode == 'ONLINE' and ride.is_paid == True %}
+           <center> <p class="alert alert-warning" role="alert">This ride had ONLINE payment. And you have paid it already </p> </center>
+           {% endif %}
+        </form>
+        <a class="align-self-end btn btn-lg btn-block btn-outline-danger" href="{% url 'booked-ride-delete' ride.id %}">Delete</a>
+      </div>
+      </div>
+
+
+
+{% empty %}
+<div >
+ <center><img src="../media/oops.jpg" class='img-responsive'alt="Responsive image"height="150" width="150" ></center>
+    <div class="card"width="107" height="240"style='font-family: "Times New Roman", Times, serif; font-size:20px'  >
+
+    <div class="card-body">
+      <center><p class="card-text">Sorry You do not have any Booked Rides</p></center>
+    </div>
+    </div>
+</div>
+
+{% endfor %}
+{% endblock content %}

@@ -1,0 +1,243 @@
+{% extends "home/home.html" %}
+{% load crispy_forms_tags %}
+{% load  static %}
+{% block content %}
+
+<div class="pt-3"></div>
+{% if not user.is_anonymous %}
+ <section class="search-sec mt-5 mt-sm-5"style='font-family: Verdana, Geneva, sans-serif; font-size:20px'>
+    <div class="container">
+        <form method="post" id='myform'>
+         {% csrf_token %}
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-sm-12 p-0">
+                           <div class="form-group">
+                                <div id="searchBoxContainer">
+                                {{ form.source_location|as_crispy_field }}
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12 p-0">
+                              <div class="form-group">
+
+                                <div id="searchBoxContainerAlt">
+                                {{ form.destination_location|as_crispy_field }}
+                                    {% comment %} <input class="form-control search-slt" type="text" id="searchBoxAlt" placeholder="Destination Location"/> {% endcomment %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12 p-0">
+
+                        {{ form.seat_no|as_crispy_field }}
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12 p-2">
+                        <label for="search">Press it to search</label><br>
+                            <button type="submit"class="btn btn-danger wrn-btn"id='search'>Search</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+{% endif %}
+<script>
+function submit() {
+  /*Put all the data posting code here*/
+ document.getElementById("myForm").reset();
+}
+</script>
+
+
+
+        <script type='text/javascript'>
+                function bingMapsReady() {
+                Microsoft.Maps.loadModule("Microsoft.Maps.AutoSuggest", {
+                    callback: onLoad,
+                    errorCallback: logError,
+                    credentials: 'Ap12Gwv9esg5iXgfAh5Ehlbf36MZ-O8051Sl66Zm6glGwq7PSaaKgGPpcOUEGICy'
+                });
+
+                function onLoad() {
+                    var options = { maxResults: 8 };
+                    initAutosuggestControl(options, "searchBox", "searchBoxContainer");
+                    initAutosuggestControl(options, "searchBoxAlt", "searchBoxContainerAlt");
+                }
+                }
+
+                function initAutosuggestControl(
+                options,
+                suggestionBoxId,
+                suggestionContainerId
+                ) {
+                var manager = new Microsoft.Maps.AutosuggestManager(options);
+                manager.attachAutosuggest(
+                    "#" + suggestionBoxId,
+                    "#" + suggestionContainerId,
+                    selectedSuggestion
+                );
+
+                function selectedSuggestion(suggestionResult) {
+                    document.getElementById(suggestionBoxId).innerHTML =
+                    suggestionResult.formattedSuggestion;
+                }
+                }
+
+
+                function logError(message) {
+                console.log(message);
+                }
+
+        </script>
+
+
+
+
+<div class="container"style="margin-top:15%">
+
+{% for ride in ride_list %}
+    {% now "Y-m-d" as todays_date %}
+    {% if todays_date <= ride.journey_date|date:"Y-m-d" and user1 != ride.user %}
+       {% if todays_date == ride.journey_date|date:"Y-m-d" and ride.is_greater_than_current %}
+            <article class="media content-section"style='font-family: Verdana, Geneva, sans-serif; font-size:20px'>
+                <img class="rounded-circle article-img" src="{{ ride.user.profile.image.url }}">
+                <div class="media-body">
+                    <div class="article-metadata">
+                        <h3>Ride is posted by</h3>
+                        <a class="mr-2">{{ ride.user }}</a>
+                        <small class="text-muted">date of journey on {{ ride.journey_date|date:"F d, Y" }}</small>
+                        <small class="text-muted">at {{ ride.journey_time}}</small>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            Source location: {{ ride.source_location }}<br>
+                            Destination Location: {{ ride.destination_location }}<br>
+
+                            <div class="row">
+                                        <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
+                                            <p>Gender of Driver : {% if ride.user.gender == 'M' %} Male {% else %} Female {% endif %}</p>
+                                        </div>
+                                            <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
+                                            <p> Number of Seats You requested:{{ seat_no }}</p>
+                                        </div>
+
+                                        <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
+                                            <p>Car model : {{ ride.car_model }}</p>
+                                        </div>
+                                        <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
+                                            <p>Car number : {{ ride.car_no }}</p>
+                                        </div>
+                                        <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
+                                            <p>Fare per Seat : {{ ride.fare }}
+                                            </p>
+                                        </div>
+                                        <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
+                                            <p>Payment mode : {{ ride.pay_mode}}</p>
+                                        </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="row">
+                            <div class="col-sm-6">
+                                <form action="" method="post">
+                                {% csrf_token %}
+                                <input type='hidden' name='placer' value='{{ ride.user }}'>
+                                <input type='hidden' name='ride_id' value='{{ ride.id }}'>
+                                <button class="btn btn-outline-info" type = "submit" name="book_button">Book</button>
+                            </div>
+                            </form>
+                    </div>
+                </div>
+            </article>
+
+
+
+
+        {% else %}
+            <article class="media content-section"style='font-family: Verdana, Geneva, sans-serif; font-size:20px'>
+                <img class="rounded-circle article-img" src="{{ ride.user.profile.image.url }}">
+                <div class="media-body">
+                    <div class="article-metadata">
+                        <h3>Ride is posted by</h3>
+                        <a class="mr-2">{{ ride.user }}</a>
+                        <small class="text-muted">date of journey on {{ ride.journey_date|date:"F d, Y" }}</small>
+                        <small class="text-muted">at {{ ride.journey_time}}</small>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            Source location: {{ ride.source_location }}<br>
+                            Destination Location: {{ ride.destination_location }}<br>
+
+                            <div class="row">
+                                        <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
+                                            <p>Gender of Driver : {% if ride.user.gender == 'M' %} Male {% else %} Female {% endif %}</p>
+                                        </div>
+                                            <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
+                                            <p> Number of Seats You requested:{{ seat_no }}</p>
+                                        </div>
+
+                                        <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
+                                            <p>Car model : {{ ride.car_model }}</p>
+                                        </div>
+                                        <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
+                                            <p>Car number : {{ ride.car_no }}</p>
+                                        </div>
+                                        <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
+                                            <p>Fare per Seat : {{ ride.fare }}
+                                            </p>
+                                        </div>
+                                        <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
+                                            <p>Payment mode : {{ ride.pay_mode}}</p>
+                                        </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="row">
+                            <div class="col-sm-6">
+                                <form action="" method="post">
+                                {% csrf_token %}
+                                <input type='hidden' name='placer' value='{{ ride.user }}'>
+                                <input type='hidden' name='ride_id' value='{{ ride.id }}'>
+                                <button class="btn btn-outline-info" type = "submit" name="book_button">Book</button>
+
+                            </form></div>
+                    </div>
+                </div>
+            </article>
+        {% endif %}
+    {% else %}
+        <div class="card"  >
+            <div class="card-body"width="307" height="240">
+                <p class="card-text">Sorry No Rides Found</p>
+            </div>
+        </div>
+
+    {% endif %}
+
+
+
+
+{% empty %}
+    <div class="card"  >
+        <div class="card-body"width="307" height="240">
+        <p class="card-text"style='font-family: Verdana, Geneva, sans-serif; font-size:20px'>Sorry No Rides Found</p>
+        </div>
+    </div>
+{% endfor %}
+
+
+
+{% endblock content %}

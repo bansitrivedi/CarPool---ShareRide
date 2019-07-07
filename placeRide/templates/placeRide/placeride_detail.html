@@ -1,0 +1,38 @@
+{% extends "home/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<div class="container">
+<div class="nav justify-content-center">
+<h1>Hello <span class="badge badge-success">{{ ride.user.first_name }}</span></h1><h1>  Your Ride details</h1>
+
+</div>
+
+
+
+
+      <div class="card">
+        <div class="card-body">
+          <ul class="list-group">
+            <li class="list-group-item"><h5>Source location</h5> {{ ride.source_location }}  </li>
+            <li class="list-group-item"><h5>Destination location</h5> {{ ride.destination_location }}  </li>
+            <li class="list-group-item"><h5>Journey date</h5> {{ ride.journey_date|date:"F d, Y" }}</li>
+            <li class="list-group-item"><h5>Journey Time</h5> {{ ride.journey_time }}</li>
+            <li class="list-group-item"><h5>Number of seats given</h5> {{ ride.seat_no }}</li>
+            <li class="list-group-item"><h5>Car Model</h5> {{ ride.car_model }}</li>
+            <li class="list-group-item"><h5>Car No</h5> {{ ride.car_no }}</li>
+            <li class="list-group-item"><h5>Mode of payment</h5> {{ ride.pay_mode }}</li>
+            <li class="list-group-item"><h5>Fare per Seat (in Rs)</h5> {{ ride.fare }}</li>
+
+          </ul>
+        </div>
+        <a class="btn btn-outline-info btn-lg nav-item nav-link" role="button" href="{% url 'my_rides' %}">Rides Menu</a>
+
+      </div>
+
+
+</div>
+<div style="height:50px">
+
+</div>
+{% endblock content %}

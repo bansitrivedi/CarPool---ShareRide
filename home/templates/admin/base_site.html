@@ -1,0 +1,26 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('QuickPool site admin') }}{% endblock %}
+
+{% block extrastyle %}
+<style>
+#header { background:#333940; color:#9A6002; overflow:hidden; }
+#header a:link, #header a:visited { color:white; }
+#header a:hover { text-decoration:underline; }
+#branding h1 { padding:0 10px; font-size:18px; margin:8px 0; font-weight:bold; color:#9A6002; }
+.module h2, .module caption, .inline-group h2 { margin:0; padding:2px 5px 3px 5px; font-size:11px; text-align:left; font-weight:bold; background-color:#9A6002; color:#9A6002; }
+
+#branding h2 { padding:0 10px; font-size:14px; margin:-8px 0 8px 0; font-weight:normal; color:#9A6002; }
+body {background-color: #F1FF95;}
+.field-__str__ {
+            font-family: Consolas, monospace;
+            
+        }
+</style>
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name"><a href="{% url 'admin:index' %}">{{ site_header|default:_('QuickPool administration') }}</a></h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

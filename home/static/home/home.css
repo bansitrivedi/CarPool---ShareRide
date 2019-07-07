@@ -1,0 +1,167 @@
+#godown{
+  height: 20px;
+}
+
+footer{ height:100px; }
+
+/* Trick */
+body{ 
+  display:flex;  
+  flex-direction:column; 
+}
+
+footer{
+  margin-top:auto; 
+}
+ 
+
+h1, h2, h3, h4, h5, h6 {
+  color: #444444;
+}
+
+
+
+.bg-steel {
+  background-color: #55094f;
+  height: 80px;
+}
+
+.site-header .navbar-nav .nav-link {
+  color: #cbd5db;
+}
+
+.site-header .navbar-nav .nav-link:hover {
+  color: #ffffff;
+}
+
+.site-header .navbar-nav .nav-link.active {
+  font-weight: 500;
+}
+.navbar-brand{
+    font-size: 40px;
+    margin-bottom: 10px;
+
+}
+
+header .highlight , header .current a{
+  color :#e8491d;
+  font-weight: bold;
+}
+
+
+
+
+.content-section {
+  background: #ffffff;
+  padding: 10px 20px;
+  border: 1px solid #dddddd;
+  border-radius: 3px;
+  margin-bottom: 20px;
+}
+
+.account-img {
+  height: 125px;
+  width: 125px;
+  margin-right: 20px;
+  margin-bottom: 16px;
+
+}
+
+.account-heading {
+  font-size: 2.5rem;
+}
+
+
+#topheader{
+
+    border-bottom: 1px solid #ebebeb;
+}
+#topheader a{
+       color: #2c3e50;
+       font-weight: 600;
+       font-size: 0.89rem;
+}
+
+.container-fluid{
+    padding-left: 0;
+    padding-right: 0;
+}
+
+nav ul li a{
+    font-size: 1.1rem;
+    font-weight: 600
+}
+
+.padding-0{
+  padding-left: 0;
+  padding-right: 0;
+}
+
+
+.rnow h3{
+
+  color: #2980b9;
+}
+
+.rnow button{
+  background-color: #f0932b;
+
+}
+
+.rnow button a{
+  color: white;
+}
+
+
+/* 
+.footer {
+  /* position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+   
+   clear: both;
+    position: relative;
+    height: 100px;
+    margin-top: -40px;
+} */
+
+
+
+/*search box css start here*/
+.search-sec{
+  padding: 2rem;
+}
+.search-slt{
+  display: block;
+  width: 100%;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #55595c;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #ccc;
+  height: calc(3rem + 2px) !important;
+  border-radius:0;
+}
+.wrn-btn{
+  width: 100%;
+  font-size: 16px;
+  font-weight: 400;
+  text-transform: capitalize;
+  height: calc(3rem + 2px) !important;
+  border-radius:0;
+}
+@media (min-width: 992px){
+  .search-sec{
+      position: relative;
+      top: -114px;
+      background: rgba(26, 70, 104, 0.51);
+  }
+}
+
+@media (max-width: 992px){
+  .search-sec{
+      background: #1A4668;
+  }
+}

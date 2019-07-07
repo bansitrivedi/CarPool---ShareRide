@@ -1,0 +1,80 @@
+{% extends "home/base.html" %}
+
+{% block content %}
+  <h1 align="center">Rides You have Placed </h1>
+  {% if user.driver == True and user.licence != 1 %}
+  {% for ride in my_rides %}
+
+    <article class="media content-section"style='background:#F1FF95; font-family: "Trebuchet MS", Helvetica, sans-serif; font-size:20px'>
+      {% comment %} <img class="rounded-circle article-img" src="{{ ride.user.profile.image.url }}"> {% endcomment %}
+      <div class="media-body">
+        <div class="article-metadata">
+          <a class="mr-2">{{ ride.user }}</a>
+          <small class="text-muted">date of journey on {{ ride.journey_date|date:"F d, Y" }}</small>
+          <small class="text-muted">at {{ ride.journey_time}}</small>
+        </div>
+        <div class="card">
+     <div class="card-body">Source location: {{ ride.source_location }} <br>
+     Destination Location: {{ ride.destination_location }}<br>
+     {% if ride.is_booked == True %}
+     <p style="color:red">Ride has been booked. Check Your mails for other details.</p>
+     {% endif %}
+     </div>
+        </div>
+        {% now "Y-m-d" as todays_date %}
+        {% if todays_date <= ride.journey_date|date:"Y-m-d"  %}
+        {% if todays_date == ride.journey_date|date:"Y-m-d" and ride.is_greater_than_current %}
+        <div class="row">
+            <div class="col-sm-6">
+                 <a class="btn btn-outline-info btn-sm mt-1 mb-1" href="{% url 'ride-view' ride.id %}">View</a>
+             </div>
+             <div class="col-sm-6 text-right">
+            <a class="btn btn-outline-danger btn-sm mt-1 mb-1 ml-auto " href="{% url 'ride-delete' ride.id %}">Delete</a>
+            <a class="btn btn-outline-warning btn-sm mt-1 mb-1 ml-auto" href="{% url 'ride-update' ride.id %}">Update</a>
+              </div>
+            </div>
+
+         {% else %}
+         <div class="row">
+            <div class="col-sm-6">
+                 <a class="btn btn-outline-info btn-sm mt-1 mb-1" href="{% url 'ride-view' ride.id %}">View</a>
+             </div>
+             <div class="col-sm-6 text-right">
+            <a class="btn btn-outline-danger btn-sm mt-1 mb-1 ml-auto " href="{% url 'ride-delete' ride.id %}">Delete</a>
+            {% if ride.is_booked != True %}
+            <a class="btn btn-outline-warning btn-sm mt-1 mb-1 ml-auto" href="{% url 'ride-update' ride.id %}">Update</a>
+            {% endif %}
+              </div>
+            </div>
+          {% endif %}
+        {% else %}
+               <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'ride-delete' ride.id %}">Delete</a>
+        {% endif %}
+      </div>
+
+    </article>
+
+{% empty %}
+    <div >
+     <center><img src="../media/oops.jpg" class='img-responsive'alt="Responsive image"height="150" width="150" ></center>
+      <div class="card"width="107" height="240"style='font-family: "Times New Roman", Times, serif; font-size:20px'  >
+
+        <div class="card-body">
+        <center>  <p class="card-text">Sorry You do not have any Placed Rides</p></center>
+        </div>
+      </div>
+    </div>
+{% endfor %}
+{% else %}
+<<div style="margin-top:10%">
+
+</div>
+<div style='background:#F1FF95; font-family: "Trebuchet MS", Helvetica, sans-serif; font-size:20px' class='p-5 mt-5'>
+     <h2>You are not registered as a driver. Hence you have no placed rides</h2>
+     <p>To place ride you must be a driver and have a licence</p>
+
+     <div class="border-top pt-3">
+       <small class="text-muted"><a href="{% url 'profile' %}" >Add a licence now</a></small></div></div>
+      {% endif %}
+
+{% endblock content %}
